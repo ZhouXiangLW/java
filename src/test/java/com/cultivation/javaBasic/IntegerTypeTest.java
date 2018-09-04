@@ -1,7 +1,6 @@
 package com.cultivation.javaBasic;
 
 import org.junit.jupiter.api.Test;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -100,6 +99,7 @@ class IntegerTypeTest {
         int theNumberWillOverflow = Integer.MAX_VALUE;
 
         assertThrows(ArithmeticException.class, () -> add(theNumberWillOverflow, 1));
+        assertThrows(ArithmeticException.class, () -> add(Integer.MIN_VALUE, -1));
     }
 
     @Test
@@ -126,14 +126,23 @@ class IntegerTypeTest {
     @Test
     void should_truncate_number_when_casting() {
         final int integer = 0x0123_4567;
-        final short smallerInteger = (short)integer;
+        final short smallerInteger = (short) integer;
 
         // TODO: please modify the following lines to pass the test
         // <!--start
         final short expected = 0x4567;
         // --end-->
-
         assertEquals(expected, smallerInteger);
+    }
+
+    @Test
+    void should_not_remain_signed() {
+        for (int i = Integer.MIN_VALUE; i < 0; i++) {
+            assertEquals(1, i >>> 31);
+        }
+        for (int i = 0; i < Integer.MAX_VALUE; i++) {
+            assertEquals(0, i >>> 31);
+        }
     }
 
     @Test
@@ -170,9 +179,10 @@ class IntegerTypeTest {
 
     private int add(int left, int right) {
         // TODO: Please implement the method. Adding two numbers.
+        // 0x8000_0000 - 1
         // The method should throw ArithmeticException if overflow or underflow happens.
         if (Integer.compareUnsigned(left + right, Integer.MAX_VALUE) > 0 ||
-                Integer.compareUnsigned(left + right, Integer.MIN_VALUE) > 0) {
+                (left < 0 && right < 0 && Integer.compareUnsigned(left + right, Integer.MIN_VALUE) <= 0)) {
             throw new ArithmeticException();
         }
         return left + right;
