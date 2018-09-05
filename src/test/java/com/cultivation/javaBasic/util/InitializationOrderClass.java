@@ -23,7 +23,16 @@ public class InitializationOrderClass {
     }
 
     {
+        logger.add("Initialization Block3");
+    }
+
+
+    {
         logger.add("Initialization Block");
+    }
+
+    {
+        logger.add("Initialization Block2");
     }
 
     public InitializationOrderClass() {

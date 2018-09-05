@@ -32,10 +32,10 @@ class StringTest {
     @SuppressWarnings({"StringEquality", "ConstantConditions"})
     @Test
     void all_modification_method_will_create_new_string() {
+        // TODO: Please modify the following line to pass the test.
         String originalString = "The string with tailing space.     ";
         String modifiedString = originalString.trim();
 
-        // TODO: Please modify the following line to pass the test.
         //
         // It is really easy to pass the test. But you have to tell why.
         // <--start
@@ -137,9 +137,22 @@ class StringTest {
         // TODO: Create string using StringBuilder
         // <--Start
         StringBuilder builder = new StringBuilder();
-        builder.append("|---|\n");
-        builder.append("|   |\n");
-        builder.append("|---|\n");
+//        builder.append("|---|\n");
+//        builder.append("|   |\n");
+//        builder.append("|---|\n");
+
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                if (j == 0 || j == width - 1) {
+                    builder.append("|");
+                } else if (i == 1) {
+                    builder.append(" ");
+                } else {
+                    builder.append("-");
+                }
+            }
+            builder.append("\n");
+        }
 
         // --End-->
 
@@ -262,6 +275,21 @@ class StringTest {
         // <--start
         return withSurrogatePairs.codePoints().toArray();
         // --end-->
+    }
+
+    @Test
+    void should_be_immutable1() {
+        final char[] chars = new char[]{'6', '5', '4', '3', '2', '1'};
+        for (int index = 0; index < chars.length / 2; index++) {
+            swap(chars, index, chars.length - index - 1);
+        }
+        assertArrayEquals(new char[]{'1', '2', '3', '4', '5', '6'}, chars);
+    }
+
+    private void swap(final char[] chars, int index1, int index2) {
+        char tmp = chars[index1];
+        chars[index1] = chars[index2];
+        chars[index2] = tmp;
     }
 
     /*

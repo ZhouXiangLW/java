@@ -1,7 +1,5 @@
 package com.cultivation.javaBasic.showYourIntelligence;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 @SuppressWarnings({"unused", "FieldCanBeLocal"})
 public class MyStack {
     private int[] storage;
@@ -59,8 +57,12 @@ public class MyStack {
     private int pop() {
         // TODO: Please pop one element from the array.
         // <--start
-        // --end-->
+        if (count <= 0) {
+            throw new UnsupportedOperationException("stack is empty");
+        }
 
         return storage[--count];
+        // --end-->
+
     }
 }

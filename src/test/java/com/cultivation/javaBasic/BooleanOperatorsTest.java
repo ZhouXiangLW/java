@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class BooleanOperatorsTest {
 
@@ -88,4 +89,17 @@ class BooleanOperatorsTest {
 
         assertEquals(expected, ~value);
     }
+
+    @Test
+    void test_priority() {
+        // ~ > &
+        assertEquals(~0x0000_ffff & 0xffff_0000, 0xffff_0000);
+        assertEquals(0xffff_0000 & ~0x0000_ffff, 0xffff_0000);
+
+        // & > |
+        assertEquals(0x0000_ffff | 0xffff_0000 & 0x0000_0000, 0x0000_ffff);
+        assertEquals(0xffff_0000 & 0x0000_0000 | 0x0000_ffff, 0x0000_ffff);
+
+    }
 }
+
