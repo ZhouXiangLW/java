@@ -95,22 +95,14 @@ class InheritanceTest {
     @Test
     void should_use_caution_when_dealing_with_array_type() {
         DerivedFromSuperClassWithDefaultConstructor[] array = new DerivedFromSuperClassWithDefaultConstructor[4];
-        SuperClassWithDefaultConstructor[] arrayWithBaseType = (SuperClassWithDefaultConstructor[])array;
-
+        SuperClassWithDefaultConstructor[] superClassArray = (SuperClassWithDefaultConstructor[]) array;
         boolean willThrow = false;
-
         try {
-            arrayWithBaseType[arrayWithBaseType.length - 1] = new SuperClassWithDefaultConstructor();
-        } catch (Exception error) {
+            superClassArray[superClassArray.length - 1] = new SuperClassWithDefaultConstructor();
+        } catch (Exception e) {
             willThrow = true;
         }
-
-        // TODO: please modify the following code to pass the test
-        // <--start
-        final Optional<Boolean> expected = Optional.of(true);
-        // --end-->
-
-        assertEquals(expected.get(), willThrow);
+        assertTrue(willThrow);
     }
 
     @SuppressWarnings("UnnecessaryLocalVariable")

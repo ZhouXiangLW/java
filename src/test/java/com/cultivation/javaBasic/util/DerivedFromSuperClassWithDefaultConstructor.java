@@ -6,7 +6,6 @@ public class DerivedFromSuperClassWithDefaultConstructor extends SuperClassWithD
     }
 
     public DerivedFromSuperClassWithDefaultConstructor(int arg) {
-        this();
         addLog("DerivedFromSuperClassWithDefaultConstructor.constructor(int)");
     }
 

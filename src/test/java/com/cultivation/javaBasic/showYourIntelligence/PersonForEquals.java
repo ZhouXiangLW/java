@@ -9,6 +9,8 @@ public class PersonForEquals {
     private final String name;
     private final short yearOfBirth;
 
+
+
     public PersonForEquals(String name, short yearOfBirth) {
         if (name == null) {
             throw new IllegalArgumentException("name is mandatory.");
@@ -35,11 +37,12 @@ public class PersonForEquals {
     public boolean equals(Object o) {
         if (this == o)
             return true;
-        if (!(o instanceof PersonForEquals))
+        if (o == null)
+            return false;
+        if (this.getClass() != o.getClass())
             return false;
         PersonForEquals p = (PersonForEquals) o;
-        return yearOfBirth == p.yearOfBirth &&
-                Objects.equals(name, p.name);
+        return p.getName() == this.getName() && p.getYearOfBirth() == this.getYearOfBirth();
     }
 
     @Override
