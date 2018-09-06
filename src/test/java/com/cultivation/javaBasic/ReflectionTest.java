@@ -1,15 +1,16 @@
 package com.cultivation.javaBasic;
 
-import com.cultivation.javaBasic.util.Employee;
-import com.cultivation.javaBasic.util.MethodWithAnnotation;
-import com.cultivation.javaBasic.util.MyAnnotation;
+import com.cultivation.javaBasic.util.*;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Array;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class ReflectionTest {
     @Test
@@ -58,9 +59,9 @@ class ReflectionTest {
 
         // TODO: please get all public static declared methods of Double. Sorted in an ascending order
         // <--start
-        String[] publicStaticMethods = Arrays.asList(doubleClass.getMethods()).stream()
-                .filter(m -> Modifier.isStatic(m.getModifiers()))
-                .map(m -> m.getName())
+        String[] publicStaticMethods = Arrays.stream(doubleClass.getDeclaredMethods())
+                .filter(method -> Modifier.isPublic(method.getModifiers()) && Modifier.isStatic(method.getModifiers()))
+                .map(Method::getName)
                 .sorted()
                 .toArray(String[]::new);
         // --end-->
@@ -82,7 +83,9 @@ class ReflectionTest {
 
         // TODO: please get the value of `getTitle` method using reflection. No casting to Employee is allowed.
         // <--start
-        Object result = ((Employee)employee.getClass().newInstance()).getTitle();
+
+        Object obj = employee.getClass().newInstance();
+        Object result = employee.getClass().getDeclaredMethod("getTitle").invoke(obj);
         // --end-->
 
         assertEquals("Employee", result);
@@ -104,17 +107,23 @@ class ReflectionTest {
     @SuppressWarnings({"ConstantConditions", "unused"})
     @Test
     void should_be_able_to_get_the_methods_who_contains_MyAnnotation_annotation() {
-        Class<MethodWithAnnotation> theClass = MethodWithAnnotation.class;
+        Class<NewClassWithAnnotation> theClass = NewClassWithAnnotation.class;
 
-        // TODO: please get the methods who contains MyAnnotation annotation.
-        // <--start
-        String[] methodsContainsAnnotations = Arrays.asList(theClass.getMethods()).stream()
-                .filter(method -> method.isAnnotationPresent(MyAnnotation.class))
-                .map(m -> m.getName())
+        String[] methods = Arrays.stream(theClass.getDeclaredMethods())
+                .filter(method -> method.isAnnotationPresent(NewAnnotation.class))
+                .map(Method::getName)
                 .toArray(String[]::new);
-        // --end-->
+        assertArrayEquals(new String[]{"test"}, methods);
+    }
 
-        assertArrayEquals(new String[] {"theMethod"}, methodsContainsAnnotations);
+    @Test
+    void should_not_be_supper_class_array() {
+
+        NewBaseClass[] baseClasses = (NewBaseClass[])Array.newInstance(NewBaseClass.class, 4);
+        NewDerivedClass[] derivedClasses = (NewDerivedClass[])Array.newInstance(NewDerivedClass.class, 4);
+
+        assertNotEquals(derivedClasses.getClass().getSuperclass(), baseClasses.getClass());
+        assertEquals(derivedClasses.getClass().getComponentType().getSuperclass(), baseClasses.getClass().getComponentType());
     }
 }
 
