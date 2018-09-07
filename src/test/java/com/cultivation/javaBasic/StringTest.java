@@ -1,12 +1,11 @@
 package com.cultivation.javaBasic;
 
 import org.junit.jupiter.api.Test;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collector;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -279,19 +278,14 @@ class StringTest {
     }
 
     private int[] getCodePointArray(String s) {
+        int charLen = s.length();
         List<Integer> res = new ArrayList<>();
-        for (int index = 0; index < s.length(); index++) {
-            if (Character.isHighSurrogate(s.charAt(index))) {
-                res.add(Character.toCodePoint(s.charAt(index), s.charAt(++index)));
-            } else {
-                res.add((int) s.charAt(index));
-            }
+        for (int charIndex = Character.charCount(s.charAt(0));
+             charIndex < s.length()
+                ; charIndex += Character.charCount(s.charAt(charIndex))) {
+            res.add(Character.codePointAt(s.toCharArray(), charIndex));
         }
-        int[] codePoints = new int[res.size()];
-        for (int i = 0; i < res.size(); i++) {
-            codePoints[i] = res.get(i);
-        }
-        return codePoints;
+        return res.stream().mapToInt(n -> n.intValue()).toArray();
     }
 
     @Test

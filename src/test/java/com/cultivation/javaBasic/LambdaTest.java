@@ -82,7 +82,6 @@ class LambdaTest {
         // <--start
         final String expected = "The length of captured value is: " + 4;
         // --end-->
-
         value.setValue("Blah");
         assertEquals(expected, lambda.getString());
     }
