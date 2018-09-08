@@ -5,7 +5,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.util.Objects;
 
 @SuppressWarnings("unused")
-public class PersonForEquals {
+public class PersonForEquals implements Comparable<PersonForEquals> {
     private final String name;
     private final short yearOfBirth;
 
@@ -48,5 +48,19 @@ public class PersonForEquals {
     @Override
     public int hashCode() {
         return Objects.hash(name, yearOfBirth);
+    }
+
+    @Override
+    public int compareTo(PersonForEquals o) {
+        if (o == null) throw new IllegalArgumentException("Parameter can not be null");
+        if (getName().compareTo(o.getName()) > 0) {
+            return 1;
+        } else if (getYearOfBirth() > o.getYearOfBirth()) {
+            return 1;
+        } else if (getName().compareTo(o.getName()) == 0 && getYearOfBirth() == o.getYearOfBirth()) {
+            return 0;
+        } else {
+            return -1;
+        }
     }
 }
