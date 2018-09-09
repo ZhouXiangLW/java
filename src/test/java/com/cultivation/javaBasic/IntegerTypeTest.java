@@ -181,11 +181,7 @@ class IntegerTypeTest {
         // TODO: Please implement the method. Adding two numbers.
         // 0x8000_0000 - 1
         // The method should throw ArithmeticException if overflow or underflow happens.
-        if (Integer.compareUnsigned(left + right, Integer.MAX_VALUE) > 0 ||
-                (left < 0 && right < 0 && Integer.compareUnsigned(left + right, Integer.MIN_VALUE) <= 0)) {
-            throw new ArithmeticException();
-        }
-        return left + right;
+        return Math.addExact(left, right);
     }
 
     /*

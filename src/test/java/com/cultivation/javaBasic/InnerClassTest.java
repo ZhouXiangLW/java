@@ -6,6 +6,7 @@ import com.cultivation.javaBasic.util.LocalClassUpdateField;
 import com.cultivation.javaBasic.util.StaticInnerClass;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Field;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -19,7 +20,7 @@ class InnerClassTest {
 
         // TODO: please modify the following code to pass the test
         // <--start
-        final Optional<Integer> expected = Optional.empty();
+        final Optional<Integer> expected = Optional.of(2019);
         // --end-->
 
         assertEquals(expected.get().intValue(), instance.getYear());
@@ -33,9 +34,11 @@ class InnerClassTest {
         InnerClassUpdateField.YearIncrementer incrementer = instance.new YearIncrementer();
         incrementer.increment();
 
+        Field[] fields = instance.new YearIncrementer().getClass().getFields();
+
         // TODO: please modify the following code to pass the test
         // <--start
-        final Optional<Integer> expected = Optional.empty();
+        final Optional<Integer> expected = Optional.of(2019);
         // --end-->
 
         assertEquals(expected.get().intValue(), instance.getYear());
@@ -49,7 +52,7 @@ class InnerClassTest {
 
         // TODO: please modify the following code to pass the test
         // <--start
-        final Optional<Integer> expected = Optional.empty();
+        final Optional<Integer> expected = Optional.of(2019);
         // --end-->
 
         assertEquals(expected.get().intValue(), instance.getYear());
@@ -63,7 +66,7 @@ class InnerClassTest {
 
         // TODO: please modify the following code to pass the test
         // <--start
-        final Optional<Integer> expected = Optional.empty();
+        final Optional<Integer> expected = Optional.of(2019);
         // --end-->
 
         assertEquals(expected.get().intValue(), instance.getYear());
@@ -76,7 +79,7 @@ class InnerClassTest {
 
         // TODO: please modify the following code to pass the test
         // <--start
-        final String expected = null;
+        final String expected = "Hello";
         // --end-->
 
         assertEquals(expected, inner.getName());

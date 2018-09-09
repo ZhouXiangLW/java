@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -22,6 +23,8 @@ class LambdaTest {
         // <--start
         final String expect = "Hello";
         // --end-->
+        List<Integer> integers = new ArrayList<>();
+        integers.forEach(System.out::println);
 
         assertEquals(expect, lambda.getString());
     }
