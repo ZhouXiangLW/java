@@ -11,17 +11,16 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ExceptionTest {
     @Test
     void should_customize_exception() {
         try {
-            throw new StringFormatException("the message");
-        } catch (StringFormatException error) {
-            assertEquals("the message", error.getMessage());
+            throw new StringFormatException("message");
+        } catch (StringFormatException e) {
+            assertEquals("message", e.getMessage());
+            assertNull(e.getCause());
         }
     }
 
@@ -53,8 +52,7 @@ class ExceptionTest {
     @Test
     void should_use_the_try_pattern() {
         ClosableStateReference closableStateReference = new ClosableStateReference();
-        try (MyClosableType closable = new MyClosableType(closableStateReference))
-        {
+        try (MyClosableType closable = new MyClosableType(closableStateReference)) {
             assertFalse(closable.isClosed());
         }
 
@@ -86,8 +84,8 @@ class ExceptionTest {
         // --end-->
 
         assertArrayEquals(
-            expected,
-            logger.toArray());
+                expected,
+                logger.toArray());
     }
 
     @Test
@@ -95,8 +93,8 @@ class ExceptionTest {
         String methodName = StackFrameHelper.getCurrentMethodName();
 
         assertEquals(
-            "com.cultivation.javaBasic.ExceptionTest.should_get_method_name_in_stack_frame",
-            methodName);
+                "com.cultivation.javaBasic.ExceptionTest.should_get_method_name_in_stack_frame",
+                methodName);
     }
 
     @SuppressWarnings({"ReturnInsideFinallyBlock", "SameParameterValue"})
@@ -108,6 +106,16 @@ class ExceptionTest {
                 return 0;
             }
         }
+    }
+
+    @Test
+    void method1() throws Exception {
+        method2();
+        assertTrue(true);
+    }
+
+    private void method2() throws Exception {
+        throw new Error();
     }
 }
 

@@ -1,10 +1,6 @@
 package com.cultivation.javaBasicExtended.posMachine;
 
-import com.cultivation.javaBasic.util.Person;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import javafx.beans.binding.ObjectExpression;
-import org.omg.CORBA.CODESET_INCOMPATIBLE;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -63,23 +59,31 @@ public class PosMachine {
     }
 
     private List<String> getBarCode(String content) throws IOException {
-        List<String> res = new ArrayList<>();
+        List<String> result = new ArrayList<>();
         if (content == null) {
-            return res;
+            return result;
         }
         ObjectMapper mapper = new ObjectMapper();
         List<Object> objects = mapper.readValue(content, List.class);
         for (Object object : objects) {
-            res.add(mapper.readValue(mapper.writeValueAsString(object), String.class));
+            String code = mapper.readValue(mapper.writeValueAsString(object), String.class);
+            if (!products.stream().anyMatch(product -> product.getId().equals(code))) {
+                throw new IllegalStateException();
+            }
+            result.add(code);
         }
-        return res;
+        return result;
     }
 
-    private Map<Product, Integer> getGroupedProduct(List<Product> products) {
-        Map<String, List<Product>> map = products.stream().collect(Collectors.groupingBy(Product::getId));
-        Map<Product, Integer> res = new HashMap<>();
-        map.forEach((k, v) -> res.put(v.get(0), v.size()));
-        return res;
+    private Map<Product, Integer> getGroupedProduct(List<Product> bought) {
+        Map<String, List<Product>> map = products.stream()
+                .collect(Collectors.groupingBy(Product::getId));
+        Map<Product, Integer> result = new HashMap<>();
+        bought.forEach(product -> {
+            List<Product> line = map.get(product.getId());
+            result.put(line.get(0), line.size());
+        });
+        return result;
     }
 }
 

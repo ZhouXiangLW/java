@@ -1,15 +1,19 @@
 package com.cultivation.javaBasic;
 
+import com.cultivation.Test.GenericClass;
+import com.cultivation.Test.MyDerivedComparable;
 import com.cultivation.javaBasic.util.Employee;
 import com.cultivation.javaBasic.util.KeyValuePair;
 import com.cultivation.javaBasic.util.Manager;
 import com.cultivation.javaBasic.util.Pair;
 import org.junit.jupiter.api.Test;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class GenericTest {
     @SuppressWarnings("unused")
@@ -19,9 +23,11 @@ class GenericTest {
 
         // TODO: please call getMiddle method for string
         // <--start
-        final String middle = null;
+        final String last = getLast(words);
+        final String middle = getMiddle(words);
         // --end-->
 
+        assertEquals("Morning", last);
         assertEquals("Good", middle);
     }
 
@@ -29,7 +35,11 @@ class GenericTest {
     void should_specify_a_type_restriction_on_typed_parameters() {
         int minimumInteger = min(new Integer[]{1, 2, 3});
         double minimumReal = min(new Double[]{1.2, 2.2, -1d});
+        int arrayWithOne = min(new Integer[]{1});
+        String minString = min(new String[]{"hello", "a"});
 
+        assertEquals("a", minString);
+        assertEquals(1, arrayWithOne);
         assertEquals(1, minimumInteger);
         assertEquals(-1d, minimumReal, 1.0E-05);
     }
@@ -40,12 +50,27 @@ class GenericTest {
         KeyValuePair<String, Integer> pair = new KeyValuePair<>("name", 2);
         KeyValuePair<Integer, String> pairWithDifferentTypeParameter = new KeyValuePair<>(2, "name");
 
+        Class<?> pairClass = pair.getClass();
+        Class<?> pairWithDifferentTypeParameterClass = pairWithDifferentTypeParameter.getClass();
+
         // TODO: please modify the following code to pass the test
         // <--start
-        final Optional<Boolean> expected = Optional.empty();
+        final Optional<Boolean> expected = Optional.of(true);
         // --end-->
 
         assertEquals(expected.get(), pair.getClass().equals(pairWithDifferentTypeParameter.getClass()));
+    }
+
+    @Test
+    void should_erase_type_of_unbound_generic_type() {
+        GenericClass<Integer> integer = new GenericClass<>();
+
+        Class<GenericClass> clazz = (Class<GenericClass>) integer.getClass();
+
+        Field field = clazz.getDeclaredFields()[0];
+
+        assertEquals(Object.class, field.getType());
+
     }
 
     @SuppressWarnings({"UnnecessaryLocalVariable", "unchecked", "unused", "ConstantConditions"})
@@ -64,7 +89,7 @@ class GenericTest {
 
         // TODO: please modify the following code to pass the test
         // <--start
-        final Optional<Boolean> expected = Optional.empty();
+        final Optional<Boolean> expected = Optional.of(true);
         // --end-->
 
         assertEquals(expected.get(), willThrow);
@@ -81,24 +106,51 @@ class GenericTest {
     }
 
     @SuppressWarnings("unused")
-    private static <T> T getMiddle(T[] args) {
-        return args[args.length / 2];
+    private static <T> T getLast(T[] array) {
+        return array[array.length - 1];
     }
+
+    private static <T> T getMiddle(T[] array) {
+        return array[array.length / 2];
+    }
+
 
     // TODO: please implement the following code to pass the test. It should be generic after all.
     // The method should only accept `Number` and the number should implement `Comparable<T>`
     // <--start
     @SuppressWarnings("unused")
-    private static <T extends Number & Comparable<T>> T min(T[] values) {
-        throw new NotImplementedException();
+    private static <T extends Comparable<T>> T min(T[] array) {
+//        if (array == null && array.length == 0) return null;
+//        T min = array[0];
+//        for (int index = 1; index < array.length; index++) {
+//            if (array[index].compareTo(min) < 0) {
+//                min = array[index];
+//            }
+//        }
+//        return min;
+        if (array == null && array.length == 0) return null;
+        return Arrays.stream(array)
+                .reduce((n1, n2) -> n1.compareTo(n2) < 0 ? n1 : n2)
+                .get();
+    }
+
+    @Test
+    void name() {
+        MyDerivedComparable[] myDerivedComparable = new MyDerivedComparable[]{
+                new MyDerivedComparable(1),
+                new MyDerivedComparable(2),
+                new MyDerivedComparable(3)
+        };
     }
     // --end-->
 
     // TODO: please implement following method to pass the test. But you cannot change the signature
     // <--start
     @SuppressWarnings("unused")
-    private static void swap(Pair<?> pair) {
-        throw new NotImplementedException();
+    private static<T> void swap(Pair<T> pair) {
+        T tmp = pair.getFirst();
+        pair.setFirst(pair.getSecond());
+        pair.setSecond(tmp);
     }
 
     // TODO: You can add additional method within the range if you like

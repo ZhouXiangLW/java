@@ -1,7 +1,5 @@
 package com.cultivation.javaBasic.showYourIntelligence;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 @SuppressWarnings("unused")
 public class StringFormatException extends Exception {
     public StringFormatException(String message) {

@@ -11,14 +11,14 @@ public class LocalClassUpdateField {
         return year;
     }
 
+    @SuppressWarnings("Convert2Lambda")
     public void somethingHappen() {
-        class YearIncrementer {
-            @SuppressWarnings("WeakerAccess")
-            public void increment() {
-                ++year;
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                ++LocalClassUpdateField.this.year;
             }
-        }
-
-        new YearIncrementer().increment();
+        };
+        runnable.run();
     }
 }

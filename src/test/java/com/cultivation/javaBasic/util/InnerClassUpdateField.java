@@ -1,24 +1,49 @@
 package com.cultivation.javaBasic.util;
 
 public class InnerClassUpdateField {
-    private int year;
+    private int year = 2018;
+
+
+    public InnerClassUpdateField(int year) {
+        this.year = year;
+    }
 
     public InnerClassUpdateField() {
-        year = 2018;
+        this.year = 2018;
     }
 
     public int getYear() {
         return year;
     }
 
-    public void somethingHappen() {
-        this.new YearIncrementer().increment();
+    public void add() {
+        class MyInnerClass{
+            private final static int YEAR = 2;
+        };
+        InnerClassUpdateField.MyInnerClass innerClass = this.new MyInnerClass(2);
+        innerClass.add();
     }
 
-    @SuppressWarnings("WeakerAccess")
-    public class YearIncrementer {
-        public void increment() {
-            ++InnerClassUpdateField.this.year;
+    public class MyInnerClass {
+
+        private final static int YEAR = 2;
+
+
+        private int year;
+
+        public MyInnerClass(int year) {
+            this.year = year;
+        }
+
+        public MyInnerClass() {
+        }
+
+        public void increaseYear() {
+            InnerClassUpdateField.this.year += 2;
+        }
+
+        public void add() {
+            InnerClassUpdateField.this.year += this.year;
         }
     }
 }
